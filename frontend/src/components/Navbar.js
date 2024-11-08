@@ -13,6 +13,9 @@ const Navbar = () => {
           </div>
           <div className='nav-items'>
             {/* Linking buttons to respective routes */}
+            <Link to='/all-doctors'>
+              <button>Tous les Docteurs</button>
+            </Link>
             <Link to='/login'>
               <button>Se connecter</button>
             </Link>
@@ -20,6 +23,8 @@ const Navbar = () => {
             <Link to='/soignant'>
               <button>Vous êtes soignant ?</button>
             </Link>
+
+            {/* Adding the "All Doctors" link */}
 
             {/* Linking the "Centre d'Aide" text */}
             <Link to='/centre-aide'>
