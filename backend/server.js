@@ -4,6 +4,7 @@ import cookieParser from 'cookie-parser'
 import connectDB from './config/db.js'
 import doctorRoute from "./routes/doctorRoute.js"
 import bookingRoute from './routes/bookingRoute.js'
+import userRoute from './routes/userRoute.js'
 dotenv.config()
 connectDB()
 const app = express()
@@ -13,4 +14,5 @@ app.use(cookieParser())
 const port = process.env.PORT || 5000
 app.use('/api/doctors', doctorRoute)
 app.use('/api/booking', bookingRoute)
+app.use('/api/users', userRoute)
 app.listen(port, () => console.log(`The server running at port ${port}`))

@@ -3,6 +3,7 @@ import { useGetdoctorDetailQuery } from '../slices/doctorApiSlice'
 import { useParams } from 'react-router-dom'
 import mapboxgl from 'mapbox-gl'
 import Map from '../components/Map'
+import Booking from './Booking'
 
 mapboxgl.accessToken = process.env.REACT_APP_MAPBOX_ACCESS_TOKEN
 
@@ -53,6 +54,7 @@ const SingleDoctor = () => {
 
       {/* Render the Map component */}
       <Map lng={-101.2934} lat={48.2325} title={`${doctor?.name}'s Location`} />
+      <Booking doctorId={doctorId} />
     </div>
   )
 }

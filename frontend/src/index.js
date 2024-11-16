@@ -15,13 +15,36 @@ import  store  from './store'
 import { Provider } from 'react-redux'
 import Doctors from './pages/Doctors';
 import SingleDoctor from './pages/SingleDoctor';
+import BookingSuccess from './pages/MyAppointments';
+import Login from './pages/Login';
+import MyAppointments from './pages/MyAppointments';
+import RegisterScreen from './pages/Register';
+import PrivateRoute from './components/PrivateRoute';
+import ProfileScreen from './pages/Profile';
+import DoctorRoute from './components/DoctorRoute';
+import DoctorAppointments from './pages/DoctorAppointments';
 const router = createBrowserRouter(
   createRoutesFromElements(
     <Route path='/' element={<App />}>
       <Route index={true} path='/' element={<HomePage />} />
+      <Route path='/search/:keyword' element={<HomePage />} />
       <Route path='/centre-aide' element={<CentreAide />} />
       <Route path='/all-doctors' element={<Doctors />} />
       <Route path='/doctor/:id' element={<SingleDoctor />} />
+      <Route path='/login' element={<Login />} />
+      <Route path='/register' element={<RegisterScreen />} />
+      <Route path='/booking-success' element={<BookingSuccess />} />
+
+      <Route path='' element={<PrivateRoute />}>
+        <Route path='/profile' element={<ProfileScreen />} />
+        <Route path='/my-appointments' element={<MyAppointments />} />
+      </Route>
+      <Route path='' element={<DoctorRoute />}>
+        <Route
+          path='/doctor/doctor-appointments'
+          element={<DoctorAppointments />}
+        />
+      </Route>
     </Route>
   )
 )

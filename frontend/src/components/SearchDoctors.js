@@ -1,40 +1,53 @@
-import React from 'react'
-import {
-  FaUserMd,
-  FaStethoscope,
-  FaMapMarkerAlt,
-  FaSearch,
-} from 'react-icons/fa'
+import React, { useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 
 const SearchDoctors = () => {
+  const [keyword, setKeyword] = useState('')
+  const [specialty, setSpecialty] = useState('')
+  const [address, setAddress] = useState('')
+  const navigate = useNavigate()
+
+  const submitHandler = (e) => {
+    e.preventDefault()
+    let url = `/search?`
+
+    if (keyword.trim()) url += `keyword=${keyword}&`
+    if (specialty.trim()) url += `specialty=${specialty}&`
+    if (address.trim()) url += `address=${address}&`
+
+    // Remove trailing '&' or '?' if no query params
+    url = url.slice(0, -1)
+
+    navigate(url)
+  }
+
   return (
-    <div className='search-doctors'>
-      <h2>Rechercher un Médecin</h2>
-      <form className='search-form'>
-      
-        <div className='form-group'>
-          <FaUserMd className='icon' />
-          <input type='text' placeholder='Nom du médecin' />
-        </div>
-
-      
-        <div className='form-group'>
-          <FaStethoscope className='icon' />
-          <input type='text' placeholder='Spécialité' />
-        </div>
-
-      
-        <div className='form-group'>
-          <FaMapMarkerAlt className='icon' />
-          <input type='text' placeholder='Adresse' />
-        </div>
-
-       
-        <button type='submit' className='search-button'>
-          <FaSearch className='button-icon' /> Rechercher
-        </button>
-      </form>
-    </div>
+    <form onSubmit={submitHandler} className='search'>
+      <input
+        type='text'
+        value={keyword}
+        onChange={(e) => setKeyword(e.target.value)}
+        placeholder='Search for doctors...'
+        className='search-input'
+      />
+      <input
+        type='text'
+        value={specialty}
+        onChange={(e) => setSpecialty(e.target.value)}
+        placeholder='Specialty'
+        className='search-input'
+      />
+      <input
+        type='text'
+        value={address}
+        onChange={(e) => setAddress(e.target.value)}
+        placeholder='Address'
+        className='search-input'
+      />
+      <button type='submit' className='search-button'>
+        Search
+      </button>
+    </form>
   )
 }
 

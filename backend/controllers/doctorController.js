@@ -2,23 +2,63 @@ import asyncHandler from '../middleware/asyncHandler.js'
 import Doctor from '../models/Doctor.js'
 
 const getAllDoctors = asyncHandler(async (req, res) => {
-  const keyword = req.query.keyword
-    ? { name: { $regex: req.query.keyword, $options: 'i' } }
-    : {}
+  const {
+    keyword,
+    specialty,
+    street,
+    city,
+    state,
+    postalCode,
+    country,
+    sortBy,
+  } = req.query
 
-  const filters = {
-    ...keyword,
-    ...(req.query.specialty ? { specialty: req.query.specialty } : {}),
+  // Build search conditions
+  const filters = {}
+
+  if (keyword) {
+    filters.name = { $regex: keyword, $options: 'i' } // Search by name (case-insensitive)
   }
 
-  // Optional: You can add sort options if needed, for example, sorting by name or experience
-  const sortOptions = req.query.sortBy ? { [req.query.sortBy]: 1 } : { name: 1 } // Default sorting by name
+  if (specialty) {
+    filters.specialty = specialty // Exact match for specialty
+  }
 
-  // Fetch doctors from the database with filters and sorting
+  // Address filter
+  const addressFilters = []
+  if (street) {
+    addressFilters.push({ 'address.street': { $regex: street, $options: 'i' } })
+  }
+  if (city) {
+    addressFilters.push({ 'address.city': { $regex: city, $options: 'i' } })
+  }
+  if (state) {
+    addressFilters.push({ 'address.state': { $regex: state, $options: 'i' } })
+  }
+  if (postalCode) {
+    addressFilters.push({
+      'address.postalCode': { $regex: postalCode, $options: 'i' },
+    })
+  }
+  if (country) {
+    addressFilters.push({
+      'address.country': { $regex: country, $options: 'i' },
+    })
+  }
+
+  if (addressFilters.length > 0) {
+    filters.$and = addressFilters // Combine all address filters with AND logic
+  }
+
+  // Sorting options
+  const sortOptions = sortBy ? { [sortBy]: 1 } : { name: 1 } // Default sorting by name
+
+  // Fetch doctors from the database
   const doctors = await Doctor.find(filters).sort(sortOptions)
 
   res.json({ doctors })
 })
+
 const getSingleDoctor = asyncHandler(async (req, res) => {
   const doctor = await Doctor.findById(req.params.id)
 
